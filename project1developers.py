@@ -9,19 +9,25 @@ from similarity_functions import process, compute_similarity
 # pairs to csv
 
 from pydriller import Repository
-repo_path = "bootstrap"
+
 DEVS = set()
-for commit in Repository(repo_path).traverse_commits():
+for commit in Repository("https://github.com/twbs/bootstrap").traverse_commits():
     DEVS.add((commit.author.name, commit.author.email))
     DEVS.add((commit.committer.name, commit.committer.email))
 
 DEVS = sorted(DEVS)
-
 with open(os.path.join("project1devs", "devs.csv"), 'w', newline='', encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile, delimiter=',', quotechar='"')
     writer.writerow(["name", "email"])
     writer.writerows(DEVS)
 
+
+DEVS = []
+with open(os.path.join("project1devs", "devs.csv"), 'r', newline='', encoding="utf-8") as csvfile:
+    reader = csv.reader(csvfile, delimiter=',')
+    for row in reader:
+        DEVS.append(row)
+DEVS = DEVS[1:]
 
 # Compute similarity between all possible pairs
 df = compute_similarity(DEVS)
