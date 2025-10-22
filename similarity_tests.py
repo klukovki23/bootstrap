@@ -25,6 +25,10 @@ class TestProcess(unittest.TestCase):
         name, *_ = process(("al //", "@idest,cmdoptesc@users.noreply.github.com"))
         self.assertEqual(name, "al")
 
+    def test_many_spaces(self):
+        name, first, last, *_ = process(("john tomas arribas", "tomas.arribas@buenostalleres.com")) 
+        self.assertEqual(first, "john")
+        self.assertEqual(last, "tomas arribas")
 
 class TestComputeSimilarity(unittest.TestCase):
     def test_detects_similar_names(self):
