@@ -7,7 +7,7 @@ DEVELOPER_EMAIL = "john@example.com"
 
 class TestProcess(unittest.TestCase):
     def test_basic_name(self):
-        name, first, last, i_first, i_last, email, prefix = process((DEVELOPER_NAME, DEVELOPER_EMAIL))
+        _, first, last, i_first, i_last, _, prefix = process((DEVELOPER_NAME, DEVELOPER_EMAIL))
         self.assertEqual(first, "john")
         self.assertEqual(last, "smith")
         self.assertEqual(i_first, "j")
@@ -15,7 +15,7 @@ class TestProcess(unittest.TestCase):
         self.assertEqual(prefix, "john")
 
     def test_name_with_accents(self):
-        name, first, last, *_ = process(("Tomás Arribas", "tomas.arribas@buenostalleres.com")) 
+        _, first, last, *_ = process(("Tomás Arribas", "tomas.arribas@buenostalleres.com")) 
         self.assertEqual(first, "tomas")
         self.assertEqual(last, "arribas")
 
@@ -29,7 +29,7 @@ class TestProcess(unittest.TestCase):
         self.assertEqual(name, "al")
 
     def test_many_spaces(self):
-        name, first, last, *_ = process(("john tomas arribas", "tomas.arribas@buenostalleres.com")) 
+        _, first, last, *_ = process(("john tomas arribas", "tomas.arribas@buenostalleres.com")) 
         self.assertEqual(first, "john")
         self.assertEqual(last, "tomas arribas")
 
