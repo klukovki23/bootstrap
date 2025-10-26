@@ -2,9 +2,11 @@ import unittest
 import pandas as pd
 from similarity_functions import process, compute_similarity
 
+developer = "John Smith"
+
 class TestProcess(unittest.TestCase):
     def test_basic_name(self):
-        name, first, last, i_first, i_last, email, prefix = process(("John Smith", "john@example.com"))
+        name, first, last, i_first, i_last, email, prefix = process((developer, "john@example.com"))
         self.assertEqual(first, "john")
         self.assertEqual(last, "smith")
         self.assertEqual(i_first, "j")
@@ -33,7 +35,7 @@ class TestProcess(unittest.TestCase):
 class TestComputeSimilarity(unittest.TestCase):
     def test_detects_similar_names(self):
         devs = [
-            ("John Smith", "john@example.com"),
+            (developer, "john@example.com"),
             ("Jon Smith", "j@example.com")
         ]
         df = compute_similarity(devs, t=0.9)
@@ -43,8 +45,8 @@ class TestComputeSimilarity(unittest.TestCase):
 
     def test_identical_emails(self):
         devs = [
-            ("John Smith", "john@example.com"),
-            ("John Smith", "john@example.com")  # identical email
+            (developer, "john@example.com"),
+            (developer, "john@example.com")  # identical email
         ]
         df = compute_similarity(devs)
         self.assertTrue(df.empty)
@@ -52,8 +54,8 @@ class TestComputeSimilarity(unittest.TestCase):
    
     def test_not_common_prefix_allows_email_rules(self):
         devs = [
-            ("John Smith", "john@example.com"),
-            ("John Smith", "jsmith@example.com")
+            (developer, "john@example.com"),
+            (developer, "jsmith@example.com")
         ]
         df = compute_similarity(devs, t=0.9)
         # email-based match (prefix contains initial + lastname) should trigger inclusion
@@ -63,7 +65,7 @@ class TestComputeSimilarity(unittest.TestCase):
 
     def test_common_prefix_blocks_email_rules(self):
         devs = [
-            ("John Smith", "me@example.com"),       # common prefix
+            (developer, "me@example.com"),       # common prefix
             ("John S.", "john@example.com")       # not common prefix
         ]
         df = compute_similarity(devs, t=0.9)
